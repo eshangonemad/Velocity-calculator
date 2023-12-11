@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Velocity Calculator</title>
+<style>body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 50px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+label {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+input[type="number"] {
+  font-size: 18px;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  width: 200px;
+  text-align: center;
+}
+
+button {
+  font-size: 18px;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+#result {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 50px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+canvas {
+  margin-top: 50px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+}
+</style>
+</head>
+<body>
+	<h1>Velocity Calculator</h1>
+	
+	<form>
+		<label for="distance">Distance (meters)</label>
+		<input type="number" id="distance" required>
+		
+		<label for="time">Time (seconds)</label>
+		<input type="number" id="time" required>
+		
+		<button type="submit">Calculate Velocity</button>
+	</form>
+	
+	<div id="result">
+		<canvas id="canvas" width="300" height="300"></canvas>
+		<p id="velocity"></p>
+	</div>
+	
+	<script>const form = document.querySelector('form');
+  const velocityEl = document.getElementById('velocity');
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const distance = parseFloat(document.getElementById('distance').value);
+    const time = parseFloat(document.getElementById('time').value);
+
+    if (isNaN(distance) || isNaN(time) || time <= 0) {
+      velocityEl.innerHTML = 'Please enter valid numbers for distance and time.';
+    } else {
+      const velocity = distance / time;
+      velocityEl.innerHTML = 'Velocity: ' + velocity.toFixed(2) + ' m/s';
+
+      // Draw a graph of distance vs time
+      const xScale = 200 / time; // 1 second = 200 pixels
+      const yScale = 200 / distance; // 1 meter = 200 pixels
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.moveTo(0, canvas.height);
+      ctx.lineTo(time * xScale, canvas.height - distance * yScale);
+      ctx.strokeStyle = '#4CAF50';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+    }
+  });
+</script>
+</body>
+</html>
